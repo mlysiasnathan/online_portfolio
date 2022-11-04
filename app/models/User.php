@@ -22,14 +22,19 @@ class User {
     }
 
     public function login($username, $password) {
-        $this->db->query('SELECT * FROM users WHERE user_email = :username');
+        $this->db->query('SELECT * FROM users WHERE user_email = :username OR user_names = :username');
 
         //Bind value
+        $this->db->bind(':username', $username);
         $this->db->bind(':username', $username);
 
         $row = $this->db->single();
 
-        $hashedPassword = $row->user_pass;
+        if ($row) {
+            $hashedPassword = $row->user_pass;
+        } else{
+            return false;
+        }
 
         if (password_verify($password, $hashedPassword)) {
             return $row;
@@ -43,31 +48,61 @@ class User {
         $result = $this->db->resultSet();
         return $result;
     }
-    public function getAbout(){
-        $this->db->query("SELECT * FROM about");
-        $resultAbout = $this->db->resultSet();
-        $rows = $this->db->single();
 
-        return $rows;
+    public function getAbout(){
+        $this->db->query('SELECT * FROM about');
+        $resultAbout = $this->db->single();
+        return $resultAbout;
     }
-    public function getComp(){
-        $this->db->query("SELECT * FROM  competences");
+    public function getCompetences(){
+        $this->db->query('SELECT * FROM competences');
         $resultComp = $this->db->resultSet();
         return $resultComp;
     }
-    public function getExp(){
-        $this->db->query("SELECT * FROM  experiences");
+
+    public function getExperiencies(){
+        $this->db->query('SELECT * FROM experiences');
         $resultExp = $this->db->resultSet();
         return $resultExp;
     }
-    public function getMsg(){
-        $this->db->query("SELECT * FROM  messages");
-        $resultMsg = $this->db->resultSet();
-        return $resultMsg;
+    public function getExperience(){
+        $this->db->query('SELECT * FROM experiences LIMIT 1');
+        $resultExpSmall = $this->db->single();
+        return $resultExpSmall;
     }
-    public function getProj(){
-        $this->db->query("SELECT * FROM  projects");
-        $resultPro = $this->db->resultSet();
+
+    public function getFormations(){
+        $this->db->query('SELECT * FROM formations');
+        $resultForm = $this->db->resultSet();
+        return $resultForm;
+    }
+    public function getFormationsSmall(){
+        $this->db->query('SELECT * FROM formations LIMIT 1');
+        $resultFormSm = $this->db->single();
+        return $resultFormSm;
+    }
+
+    public function getJobs(){
+        $this->db->query('SELECT * FROM jobs');
+        $resultJob = $this->db->resultSet();
+        return $resultJob;
+    }
+
+    public function getJob(){
+        $this->db->query('SELECT * FROM jobs LIMIT 1');
+        $resultJobSmall = $this->db->single();
+        return $resultJobSmall;
+    }
+    public function getProjects(){
+        $this->db->query('SELECT * FROM projects');
+        $resultPros = $this->db->resultSet();
+        return $resultPros;
+    }
+
+    public function getProject($proj_id){
+        $this->db->query('SELECT * FROM projects WHERE proj_id = :proj_id');
+        $this->db->bind(':proj_id', $proj_id);
+        $resultPro = $this->db->single();
         return $resultPro;
     }
 
@@ -78,6 +113,7 @@ class User {
 
         //Email param will be binded with the email variable
         $this->db->bind(':email', $email);
+        $this->db->execute();
 
         //Check if email is already registered
         if($this->db->rowCount() > 0) {

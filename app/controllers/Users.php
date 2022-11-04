@@ -6,14 +6,16 @@ class Users extends Controller {
 
     public function register() {
         $data = [
+            'title' => 'Login page',
             'username' => '',
             'email' => '',
             'password' => '',
             'confirmPassword' => '',
-            'usernameError' => '',
-            'emailError' => '',
-            'passwordError' => '',
-            'confirmPasswordError' => ''
+            'usernameRegError' => '',
+            'emailRegError' => '',
+            'passwordRegError' => '',
+            'confirmPasswordError' => '',
+            'registerError' => ''
         ];
 
       if($_SERVER['REQUEST_METHOD'] == 'POST'){
@@ -26,41 +28,42 @@ class Users extends Controller {
                 'email' => trim($_POST['email']),
                 'password' => trim($_POST['password']),
                 'confirmPassword' => trim($_POST['confirmPassword']),
-                'usernameError' => '',
-                'emailError' => '',
-                'passwordError' => '',
-                'confirmPasswordError' => ''
+                'usernameRegError' => '',
+                'emailRegError' => '',
+                'passwordRegError' => '',
+                'confirmPasswordError' => '',
+                'registerError' => ''
             ];
 
-            $nameValidation = "/^[a-zA-Z0-9]*$/";
+            $nameValidation = "/^[a-zA-Z0-9 ]*$/";
             $passwordValidation = "/^(.{0,7}|[^a-z]*|[^\d]*)$/i";
 
             //Validate username on letters/numbers
             if (empty($data['username'])) {
-                $data['usernameError'] = 'Username is required';
+                $data['usernameRegError'] = 'Username is required';
             } elseif (!preg_match($nameValidation, $data['username'])) {
-                $data['usernameError'] = 'Name can only contain letters and numbers.';
+                $data['usernameRegError'] = 'Name can only contain letters and numbers and space.';
             }
 
             //Validate email
             if (empty($data['email'])) {
-                $data['emailError'] = 'Email address is required';
+                $data['emailRegError'] = 'Email address is required';
             } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-                $data['emailError'] = 'Please enter the correct format.';
+                $data['emailRegError'] = 'Please enter the correct format.';
             } else {
                 //Check if email exists.
                 if ($this->userModel->findUserByEmail($data['email'])) {
-                $data['emailError'] = 'Email is already taken.';
+                $data['emailRegError'] = 'Email is already taken.';
                 }
             }
 
            // Validate password on length, numeric values,
             if(empty($data['password'])){
-              $data['passwordError'] = 'Please enter password.';
-            } elseif(strlen($data['password']) < 6){
-              $data['passwordError'] = 'Password must be at least 8 characters';
-            } elseif (preg_match($passwordValidation, $data['password'])) {
-              $data['passwordError'] = 'Password must be have at least one numeric value.';
+              $data['passwordRegError'] = 'Please enter password.';
+            } elseif(strlen($data['password']) < 3){
+              $data['passwordRegError'] = 'Password must be at least 4 characters';
+            } elseif (!preg_match($passwordValidation, $data['password'])) {
+              $data['passwordRegError'] = 'Password must be have at least one numeric value.';
             }
 
             //Validate confirm password
@@ -73,31 +76,40 @@ class Users extends Controller {
             }
 
             // Make sure that errors are empty
-            if (empty($data['usernameError']) && empty($data['emailError']) && empty($data['passwordError']) && empty($data['confirmPasswordError'])) {
+            if (empty($data['usernameRegError']) && empty($data['emailRegError']) && empty($data['passwordRegError']) && empty($data['confirmPasswordError'])) {
 
                 // Hash password
                 $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
 
                 //Register user from model function
                 if ($this->userModel->register($data)) {
-                    //Redirect to the login page
-                    header('location: ' . URL_ROOT . '/users/login');
+//Redirect to the login Autentification=====================================================================================
+                    $loggedInUser = $this->userModel->login($data['email'], trim($_POST['password']));
+
+                    if ($loggedInUser) {
+                        $this->createUserSession($loggedInUser);
+                    } else {
+                        $data['LogInError'] = 'Password or username is incorrect. Please try again.';
+                        $this->view('pages/index', $data);
+                    }
                 } else {
                     die('Something went wrong.');
                 }
+            }else{
+                $data['registerError'] = 'Registration fail ! TRY AGAIN';
             }
         }
-        // $this->view('users/register', $data);
-        $this->view('users/register', $data);
+        $this->view('pages/index', $data);
     }
 
     public function login() {
         $data = [
-            // 'title' => 'Login page',
+            'title' => 'Login page',
             'username' => '',
             'password' => '',
             'usernameError' => '',
-            'passwordError' => ''
+            'passwordError' => '',
+            'LogInError' => ''
         ];
 
         //Check for post
@@ -106,10 +118,12 @@ class Users extends Controller {
             $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
 
             $data = [
-                'username' => trim($_POST['email']),
-                'password' => trim($_POST['password']),
+                'title' => 'Login page',
+                'username' => trim($_POST['username_user']),
+                'password' => trim($_POST['password_user']),
                 'usernameError' => '',
                 'passwordError' => '',
+                'LogInError' => ''
             ];
             //Validate username
             if (empty($data['username'])) {
@@ -129,8 +143,8 @@ class Users extends Controller {
                     $this->createUserSession($loggedInUser);
                 } else {
                     $data['passwordError'] = 'Password or username is incorrect. Please try again.';
-
-                    $this->view('users/register', $data);
+                    $data['LogInError'] = 'Login fail ! TRY AGAIN';
+                    $this->view('pages/index', $data);
                 }
             }
 
@@ -142,20 +156,20 @@ class Users extends Controller {
                 'passwordError' => ''
             ];
         }
-        $this->view('users/register', $data);
+        $this->view('pages/index', $data);
     }
 
     public function createUserSession($user) {
-        $_SESSION['user_id'] = $user->user_id;
-        $_SESSION['username'] = $user->user_names;
-        $_SESSION['email'] = $user->user_email;
+        $_SESSION['user_idBlog'] = $user->user_id;
+        $_SESSION['usernameBlog'] = $user->user_names;
+        $_SESSION['emailBlog'] = $user->user_email;
         header('location:' . URL_ROOT . '/pages/index');
     }
 
     public function logout() {
-        unset($_SESSION['user_id']);
-        unset($_SESSION['username']);
-        unset($_SESSION['email']);
-        header('location:' . URL_ROOT . '/pages/index');
+        unset($_SESSION['user_idBlog']);
+        unset($_SESSION['usernameBlog']);
+        unset($_SESSION['emailBlog']);
+        header('location:' . URL_ROOT);
     }
 }

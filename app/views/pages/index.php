@@ -2,14 +2,24 @@
 
 <?php include APP_ROOT . '/views/includes/side-bar.php';?>
 
-<?php var_dump($_SESSION) ?>
-
   <!-- ======= Hero Section ======= -->
   <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
+    
     <div class="hero-container" data-aos="fade-in">
-      <h1>Lysias Nathan</h1>
+      <h1><?= $data['abouts']->name_2; ?></h1>
       <p>I'm <span class="typed" data-typed-items="Web Designer,Web Developer, Freelancer"></span></p>
     </div>
+    <?php if(isset($data['registerError'])) : ?>
+      <div class="alert alert-danger rounded text-center text-danger col-lg-5" role="alert">
+          <?= $data['registerError'] ?>
+      </div>
+    <?php endif ?>
+    
+    <?php if(isset($data['LogInError'])) : ?>
+      <div class="alert alert-danger rounded text-center text-danger col-lg-5" role="alert">
+          <?= $data['LogInError'] ?>
+      </div>
+    <?php endif ?>
   </section><!-- End Hero -->
 
   <main id="main">
@@ -17,7 +27,6 @@
     <!-- ======= About Section ======= -->
     <section id="about" class="about">
       <div class="container">
-
         <div class="section-title">
           <h2>About</h2>
           <!-- <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p> -->
@@ -36,16 +45,16 @@
             <div class="row">
               <div class="col-lg-6">
                 <ul>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Website:</strong> <span>www.example.com</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Phone:</strong> <span>+243 976 742 676</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>City:</strong> <span>Goma, Nord-Kivu, RDC</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Phone:</strong> <span><?= $data['abouts']->tel_1; ?></span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>City:</strong> <span><?= $data['abouts']->country; ?>, <?= $data['abouts']->city; ?></span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Address:</strong> <span><?= $data['abouts']->address; ?></span></li>
                 </ul>
               </div>
               <div class="col-lg-6">
                 <ul>
-                  <li><i class="bi bi-chevron-right"></i> <strong>Age:</strong> <span>24</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>Age:</strong> <span><?php $sub = null;$date = new Datetime(); echo $sub = (int)$date->format('Y') - (int)date('Y', strtotime($data['abouts']->birthday));?></span></li>
                   <li><i class="bi bi-chevron-right"></i> <strong>Degree:</strong> <span>Master</span></li>
-                  <li><i class="bi bi-chevron-right"></i> <strong>PhEmailone:</strong> <span>mlysiasnathan@gmail.com</span></li>
+                  <li><i class="bi bi-chevron-right"></i> <strong>PhEmailone:</strong> <span><?= $data['abouts']->gmail ?></span></li>
                   <li><i class="bi bi-chevron-right"></i> <strong>Freelance:</strong> <span>Available</span></li>
                 </ul>
               </div>
@@ -57,9 +66,15 @@
       </div>
     </section><!-- End About Section -->
     <div class="container">
-      <a class="col-12 rounded btn btn-outline-primary" href="<?=URL_ROOT?>/pages/about">
-        Read more about my <strong>Facts</strong> and my <strong>Skills</strong>
-      </a>
+      <?php if(isset($_SESSION['usernameBlog'])) : ?>
+        <a class="col-12 rounded btn btn-outline-primary" href="<?=URL_ROOT?>/pages/about">
+          Read more about my <strong>Facts</strong> and my <strong>Skills</strong>
+        </a>
+      <?php else : ?>
+        <a class="col-12 rounded btn btn-outline-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalLogin">
+          Read more about my <strong>Facts</strong> and my <strong>Skills</strong>
+        </a>
+      <?php endif ?>
     </div>
     <!-- End Skills Section -->
 
@@ -76,34 +91,38 @@
           <div class="col-lg-6" data-aos="fade-up">
             <h3 class="resume-title">Small Sumary about me</h3>
             <div class="resume-item pb-0">
-              <h4>Lysias Nathan</h4>
-              <p><em>Innovative and deadline-driven Graphic Designer with 3+ years of experience designing and developing user-centered digital/print marketing material from initial concept to final, polished deliverable.</em></p>
+              <h4><?= $data['abouts']->name_2; ?></h4>
+              <p><em><?= $data['abouts']->sumary ?></em></p>
               <ul>
-                <li>Portland par 127,Orlando, FL</li>
-                <li>+243 976 742 676</li>
-                <li>mlysiasnathan@gmail.com</li>
+                <li><?= $data['abouts']->address; ?></li>
+                <li><?= $data['abouts']->tel_1; ?></li>
+                <li><?= $data['abouts']->gmail ?></li>
               </ul>
             </div>
 
             <h3 class="resume-title">Education</h3>
             
             <div class="resume-item">
-              <h4>Bachelor of Fine Arts &amp; Graphic Design</h4>
-              <h5>2010 - 2014</h5>
+              <h4><?= $data['experience']->course; ?></h4>
+              <h5><?= $data['experience']->start ?> - <?= $data['experience']->end ?></h5>
+              <h5>Optains with <?= $data['experience']->level ?></h5>
             </div>
           </div>
           <div class="col-lg-6" data-aos="fade-up" data-aos-delay="100">
             <h3 class="resume-title">Professional Experience</h3>
             <div class="resume-item">
-              <h4>Senior graphic design specialist</h4>
-              <h5>2019 - Present</h5>
-              <p><em>Experion, New York, NY </em></p>
+              <h4><?= $data['job']->job_name ?></h4>
+              <h5><?= $data['job']->job_start ?> - <?= $data['job']->job_end ?></h5>
+              <p><em><?= $data['job']->job_address ?></em></p>
               <ul>
-                <li>Lead in the design, development, and implementation of the graphic, layout, and production communication materials</li>
-                <li>Delegate tasks to the 7 members of the design team and provide counsel on all aspects of the project. </li>
-                <li>Supervise the assessment of all graphic materials in order to ensure quality and accuracy of the design</li>
-                <li>Oversee the efficient use of production project budgets ranging from $2,000 - $25,000</li>
+                <li><?= $data['job']->role_1 ?></li>
+                <li><?= $data['job']->role_2 ?></li>
               </ul>
+            </div>
+            <h3 class="resume-title">Formations &amp; Internship Experience</h3>
+            <div class="resume-item">
+              <h4><?= $data['formations']->form_names ?></h4>
+              <h5><?= $data['formations']->form_start ?> - <?= $data['formations']->form_end ?></h5>
             </div>
           </div>
         </div>
@@ -111,9 +130,15 @@
       </div>
     </section>
     <div class="container">
-      <a class="col-12 rounded btn btn-outline-primary mb-3" href="<?=URL_ROOT?>/pages/resume">
-        Read more about my <strong>Studies</strong> , my <strong>Degrees</strong> and my <strong>Professional Experience</strong>
-      </a>
+      <?php if(isset($_SESSION['usernameBlog'])) : ?>
+        <a class="col-12 rounded btn btn-outline-primary mb-3" href="<?=URL_ROOT?>/pages/resume">
+          Read more about my <strong>Studies</strong> , my <strong>Degrees</strong> and my <strong>Professional Experience</strong>
+        </a>
+      <?php else : ?>
+        <a class="col-12 rounded btn btn-outline-primary mb-3" type="button" data-bs-toggle="modal" data-bs-target="#modalLogin">
+          Read more about my <strong>Studies</strong> , my <strong>Degrees</strong> and my <strong>Professional Experience</strong>
+        </a>
+      <?php endif ?>
     </div>
 
     <!-- End Resume Section -->
@@ -139,103 +164,29 @@
 
         <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="100">
 
-          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-            <div class="portfolio-wrap">
-              <img src="<?=URL_ROOT?>/assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="<?=URL_ROOT?>/assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 1"><i class="bx bx-plus"></i></a>
-                <a href="<?=URL_ROOT?>/pages/project" title="More Details"><i class="bx bx-link"></i></a>
-
-              </div>
-            </div>
-          </div>
-
+      <?php foreach($data['projects'] as $project) : ?>
+        <?php if($project->proj_category == 'web design'): ?>
           <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-            <div class="portfolio-wrap">
-              <img src="<?=URL_ROOT?>/assets/img/portfolio/portfolio-2.jpg" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="<?=URL_ROOT?>/assets/img/portfolio/portfolio-2.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 3"><i class="bx bx-plus"></i></a>
-                <a href="<?=URL_ROOT?>/pages/project" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-
+        <?php elseif($project->proj_category == 'android'): ?>
           <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-            <div class="portfolio-wrap">
-              <img src="<?=URL_ROOT?>/assets/img/portfolio/portfolio-3.jpg" class="img-fluid" alt="">
+        <?php endif ?>
+            <div class="portfolio-wrap" style="border-radius: 10px;">
+              <img src="<?=URL_ROOT?>/public/upload/<?= $project->land_1?>" class="img-fluid" alt="">
               <div class="portfolio-links">
-                <a href="<?=URL_ROOT?>/assets/img/portfolio/portfolio-3.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 2"><i class="bx bx-plus"></i></a>
-                <a href="<?=URL_ROOT?>/pages/project" title="More Details"><i class="bx bx-link"></i></a>
+                <a href="<?=URL_ROOT?>/public/upload/<?= $project->land_1?>" data-gallery="portfolioGallery" class="portfolio-lightbox" title="<?= $project->proj_name?>"><i class="bx bx-key"></i></a>
+                <?php if(isset($_SESSION['usernameBlog'])) : ?>
+                  <a href="<?=URL_ROOT?>/pages/project/<?= $project->proj_id?>" title="More Details"><i class="bx bx-file-blank"></i></a>
+                <?php else : ?>
+                  <a type="button" data-bs-toggle="modal" data-bs-target="#modalLogin" title="More Details"><i class="bx bx-file-blank"></i></a>
+                <?php endif ?>
               </div>
             </div>
           </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-            <div class="portfolio-wrap">
-              <img src="<?=URL_ROOT?>/assets/img/portfolio/portfolio-4.jpg" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="<?=URL_ROOT?>/assets/img/portfolio/portfolio-4.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 2"><i class="bx bx-plus"></i></a>
-                <a href="<?=URL_ROOT?>/pages/project" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-            <div class="portfolio-wrap">
-              <img src="<?=URL_ROOT?>/assets/img/portfolio/portfolio-5.jpg" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="<?=URL_ROOT?>/assets/img/portfolio/portfolio-5.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 2"><i class="bx bx-plus"></i></a>
-                <a href="<?=URL_ROOT?>/pages/project" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-            <div class="portfolio-wrap">
-              <img src="<?=URL_ROOT?>/assets/img/portfolio/portfolio-6.jpg" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="<?=URL_ROOT?>/assets/img/portfolio/portfolio-6.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 3"><i class="bx bx-plus"></i></a>
-                <a href="<?=URL_ROOT?>/pages/project" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-web">
-            <div class="portfolio-wrap">
-              <img src="<?=URL_ROOT?>/assets/img/portfolio/portfolio-7.jpg" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="<?=URL_ROOT?>/assets/img/portfolio/portfolio-7.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 1"><i class="bx bx-plus"></i></a>
-                <a href="<?=URL_ROOT?>/pages/project" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-            <div class="portfolio-wrap">
-              <img src="<?=URL_ROOT?>/assets/img/portfolio/portfolio-8.jpg" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="<?=URL_ROOT?>/assets/img/portfolio/portfolio-8.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Card 3"><i class="bx bx-plus"></i></a>
-                <a href="<?=URL_ROOT?>/pages/project" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
-
-          <div class="col-lg-4 col-md-6 portfolio-item filter-app">
-            <div class="portfolio-wrap">
-              <img src="<?=URL_ROOT?>/assets/img/portfolio/portfolio-9.jpg" class="img-fluid" alt="">
-              <div class="portfolio-links">
-                <a href="<?=URL_ROOT?>/assets/img/portfolio/portfolio-9.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="Web 3"><i class="bx bx-plus"></i></a>
-                <a href="<?=URL_ROOT?>/pages/project" title="More Details"><i class="bx bx-link"></i></a>
-              </div>
-            </div>
-          </div>
+      <?php endforeach ?>
 
         </div>
-
       </div>
     </section><!-- End Portfolio Section -->
-
-    
 
     <!-- ======= Testimonials Section ======= -->
     <section id="testimonials" class="testimonials section-bg">
@@ -337,19 +288,19 @@
               <div class="address">
                 <i class="bi bi-geo-alt"></i>
                 <h4>Location:</h4>
-                <p>A108 Adam Street, New York, NY 535022</p>
+                <p><?= $data['abouts']->country; ?>, <?= $data['abouts']->city; ?></p>
               </div>
 
               <div class="email">
                 <i class="bi bi-envelope"></i>
                 <h4>Email:</h4>
-                <p>info@example.com</p>
+                <p><?= $data['abouts']->gmail ?></p>
               </div>
 
               <div class="phone">
                 <i class="bi bi-phone"></i>
                 <h4>Call:</h4>
-                <p>+1 5589 55488 55s</p>
+                <p><?= $data['abouts']->tel_1; ?></p>
               </div>
 
               <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d12097.433213460943!2d-74.0062269!3d40.7101282!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xb89d1fe6bc499443!2sDowntown+Conference+Center!5e0!3m2!1smk!2sbg!4v1539943755621" frameborder="0" style="border:0; width: 100%; height: 290px;" allowfullscreen></iframe>

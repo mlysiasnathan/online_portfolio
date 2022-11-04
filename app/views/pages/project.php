@@ -3,14 +3,13 @@
 <?php include APP_ROOT . '/views/includes/side-bar.php';?>
 
 
-
 <main id="main">
 	<!-- ======= Breadcrumbs ======= -->
     <section class="breadcrumbs">
       <div class="container">
 
         <div class="d-flex justify-content-between align-items-center section-title">
-            <h2>Project Portofolio</h2>
+            <h2>Project <?= $data['project']->proj_name ?></h2>
         </div>
 
       </div>
@@ -27,15 +26,15 @@
               <div class="swiper-wrapper align-items-center">
 
                 <div class="swiper-slide">
-                  <img src="<?=URL_ROOT?>/public/assets/img/portfolio/portfolio-details-1.jpg" alt="">
+                  <img src="<?=URL_ROOT?>/public/upload/<?= $data['project']->land_1 ?>" alt="">
                 </div>
 
                 <div class="swiper-slide">
-                  <img src="<?=URL_ROOT?>/public/assets/img/portfolio/portfolio-details-2.jpg" alt="">
+                  <img src="<?=URL_ROOT?>/public/upload/<?= $data['project']->land_2 ?>" alt="">
                 </div>
 
                 <div class="swiper-slide">
-                  <img src="<?=URL_ROOT?>/public/assets/img/portfolio/portfolio-details-3.jpg" alt="">
+                  <img src="<?=URL_ROOT?>/public/upload/<?= $data['project']->land_3 ?>" alt="">
                 </div>
 
               </div>
@@ -47,16 +46,15 @@
             <div class="portfolio-info">
               <h3>Project information</h3>
               <ul>
-                <li><strong>Category</strong>: Web design</li>
-                <li><strong>Client</strong>: ASU Company</li>
-                <li><strong>Project date</strong>: 01 March, 2020</li>
-                <li><strong>Project URL</strong>: <a href="#">www.example.com</a></li>
+                <li><strong>Category</strong>: <?= $data['project']->proj_category ?></li>
+                <li><strong>Client</strong>: <?= $data['project']->proj_client ?></li>
+                <li><strong>Project URL</strong>: <a href="<?= dirname(URL_ROOT) . $data['project']->proj_url ?>" target="_blank">http://localhost<?= $data['project']->proj_url ?></a></li>
               </ul>
             </div>
             <div class="portfolio-description">
-              <h2>This is an example of portfolio detail</h2>
+              <h2><?= $data['project']->proj_name ?> detail</h2>
               <p>
-                Autem ipsum nam porro corporis rerum. Quis eos dolorem eos itaque inventore commodi labore quia quia. Exercitationem repudiandae officiis neque suscipit non officia eaque itaque enim. Voluptatem officia accusantium nesciunt est omnis tempora consectetur dignissimos. Sequi nulla at esse enim cum deserunt eius.
+                <?= $data['project']->proj_detail ?>
               </p>
             </div>
           </div>
@@ -65,11 +63,6 @@
 
       </div>
     </section><!-- End Portfolio Details Section -->
-
-
-
-
-
 
     </main><!-- End #main -->
 
