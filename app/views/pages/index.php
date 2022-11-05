@@ -117,6 +117,7 @@
               <ul>
                 <li><?= $data['job']->role_1 ?></li>
                 <li><?= $data['job']->role_2 ?></li>
+                <li><?= $data['job']->role_3 ?></li>
               </ul>
             </div>
             <h3 class="resume-title">Formations &amp; Internship Experience</h3>
