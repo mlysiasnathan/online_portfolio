@@ -9,9 +9,9 @@
         <img src="<?=URL_ROOT?>/assets/img/profile-img.jpg" alt="" class="img-fluid rounded-circle">
         <h1 class="text-light"><a href="#"><?= $data['abouts']->name_2; ?></a></h1>
         <div class="social-links mt-3 text-center">
-          <a href="tel:+250780870676" class="whatsapp"><i class="bx bxl-whatsapp"></i></a>
+          <a href="tel:+243976742676" class="whatsapp"><i class="bx bxl-whatsapp"></i></a>
           <a href="https://www.facebook.com/lysias.nathan" class="facebook"><i class="bx bxl-facebook"></i></a>
-          <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+          <a href="tel:+243976742676" class="instagram"><i class="bx bxl-telegram"></i></a>
           <a href="mailto:mlysiasnathan@gmail.com" class="google-plus"><i class="bx bxl-google"></i></a>
           <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
         </div>

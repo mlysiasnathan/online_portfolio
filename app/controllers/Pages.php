@@ -61,8 +61,10 @@ class Pages extends Controller {
             header('Location: ' . URL_ROOT);
         }
         $project = $this->userModel->getProject($proj_id);
+        $abouts = $this->userModel->getAbout();
         $data = [
             'title' => 'LYSNATH - Blog',
+            'abouts' => $abouts,
             'project' => $project,
         ];
         $this->view('pages/project', $data);

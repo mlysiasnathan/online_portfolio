@@ -42,24 +42,46 @@
             </div>
           </div>
 
+          <div class="col-lg-4" style="width: 20.5%">
+            <div class="portfolio-details-slider swiper">
+                <div class="swiper-wrapper align-items-center">
+
+                  <div class="swiper-slide">
+                    <img src="<?=URL_ROOT?>/public/upload/<?= $data['project']->port_1 ?>" alt="">
+                  </div>
+
+                  <div class="swiper-slide">
+                    <img src="<?=URL_ROOT?>/public/upload/<?= $data['project']->port_2 ?>" alt="">
+                  </div>
+
+                  <div class="swiper-slide">
+                    <img src="<?=URL_ROOT?>/public/upload/<?= $data['project']->port_3 ?>" alt="">
+                  </div>
+
+                </div>
+                <div class="swiper-pagination"></div>
+              </div>
+          </div>
+        <div class="row gy-4">
           <div class="col-lg-4">
             <div class="portfolio-info">
               <h3>Project information</h3>
               <ul>
                 <li><strong>Category</strong>: <?= $data['project']->proj_category ?></li>
                 <li><strong>Client</strong>: <?= $data['project']->proj_client ?></li>
-                <li><strong>Project URL</strong>: <a href="<?= dirname(URL_ROOT) . $data['project']->proj_url ?>" target="_blank">http://localhost<?= $data['project']->proj_url ?></a></li>
+                <li><strong>Project URL</strong>: <a href="<?= $data['project']->proj_url ?>" target="_blank"><?= $data['project']->proj_url ?></a></li>
               </ul>
             </div>
-            <div class="portfolio-description">
-              <h2><?= $data['project']->proj_name ?> detail</h2>
-              <p>
-                <?= $data['project']->proj_detail ?>
-              </p>
-            </div>
           </div>
-
+          <div class="portfolio-description col-lg-8">
+            <h2><?= $data['project']->proj_name ?> detail</h2>
+            <hr>
+            <p>
+              <?= $data['project']->proj_detail ?>
+            </p>
+          </div>
         </div>
+      </div>
 
       </div>
     </section><!-- End Portfolio Details Section -->
